@@ -1,106 +1,57 @@
-#include <iostream>
 #include <fstream>
-#include <vector>
+#include <iostream>
+#include <cstdlib>
 
 using namespace std;
 
-int main(int argc, char *argv[]) {
-   
-   string inputFile;
-   string outputFile;
-   int numInput;
-   vector<int> nums;
-   char comma;
-   
-   // Assign to inputFile value of 2nd command line argument
-   inputFile = argv[1];
-   // Assign to outputFile value of 3rd command line argument
-   outputFile = argv[2];
-   
-   // Create input stream and open input csv file.
-   ifstream inputFS;
+// Place charCnt prototype (declaration) here
 
-   inputFS.open(inputFile);
-   
-   // Verify file opened correctly.
-   
-   // Output error message and return 1 if file stream did not open correctly.
-   if(!inputFS.is_open())
-   {
-      cout << "Error opening " << inputFile << endl;
-      return(1);
-   }
-   // Read in integers from input file to vector.
-   else
-   {
-      while (inputFS >> numInput)
-      {
-      nums.push_back(numInput);
-      if(!inputFS.fail())
-      {
-         inputFS >> comma;
-      }
-      }
-   }
-   
-   
-   // Close input stream.
-   inputFS.close();
-   
-   // Get integer average of all values read in.
-   int avg;
-   int totalVec = 0;
+int charCnt (const string, const char);
 
-   for (unsigned int i = 0; i < nums.size(); ++i)
-   {
-      totalVec = totalVec + nums.at(i);
-   }
-
-   avg = totalVec / nums.size();
-
+int main() {
+   string filename;
+   char ch;
+   int chCnt = 0;
    
-   
-   // Convert each value within vector to be the difference between the original value and the average.
-   //int newValue;
-   //vector<int> newNums;
+   cout << "Enter the name of the input file: ";
+   cin >> filename;
+   cout << endl;
+   cout << "Enter a character: ";
+   cin.ignore(); // ignores newline left in stream after previous input statement
+   cin.get(ch);
+   cout << endl;
 
-   for(unsigned int i = 0; i < nums.size();++i)
-   {
-      nums.at(i) = nums.at(i) - avg;
-
-   }
-   
-   // Create output stream and open/create output csv file.
-   ofstream outputFS;
-
-   outputFS.open(outputFile);
-
-   // Verify file opened or was created correctly.
-
-   // Output error message and return 1 if file stream did not open correctly.
-   if(!outputFS.is_open())
-   {
-      cout << "Error opening " << outputFile << endl;
-      return(1);
-   }
-   
-   // Write converted values into ouptut csv file, each integer separated by a comma.
-   
-   for( unsigned int i = 0;i < nums.size();i++)
-   {
-      outputFS << nums.at(i);
-      //cout << nums.at(i) << " ";
-      if (i + 1 < nums.size())
-      {
-         outputFS << ',';
-         //cout << ',';
-      }
-   }
-   
-   // Close output stream.
-   outputFS.close();
-
+   chCnt = charCnt(filename, ch);   
+   cout << "# of " << ch << "'s: " << chCnt << endl;
    
    return 0;
 }
 
+// Place charCnt implementation here
+int charCnt ( const string filename, const char ch)
+{
+   ifstream lettFS;
+   int count = 0;
+   char lettInput;
+   
+   lettFS.open(filename);
+
+   if (!lettFS.is_open())
+   {
+      cout << "Error opening " << filename << endl;
+      exit(EXIT_FAILURE);
+   }
+   else
+   {
+      while (lettFS.get(lettInput))
+      {
+         if (ch == lettInput)
+         {
+            ++count;
+         }
+      }
+   }
+   
+   lettFS.close();
+   return count;
+}
